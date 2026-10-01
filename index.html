@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE SINGULARITY // TEMPORAL HUD</title>
+    
+    <!-- PWA Manifest and Icons -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#05050A">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -321,6 +327,15 @@
         // Ignite Thrusters
         animateSpace();
 
+    </script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+        });
+      }
     </script>
 </body>
 </html>
