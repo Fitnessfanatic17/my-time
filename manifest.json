@@ -1,10 +1,10 @@
 {
-  "name": "My App Name",
-  "short_name": "App",
+  "name": "Temporal HUD",
+  "short_name": "HUD",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#05050A",
+  "theme_color": "#05050A",
   "icons": [
     {
       "src": "icon-192.png",
