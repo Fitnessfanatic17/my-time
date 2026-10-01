@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE SINGULARITY // TEMPORAL HUD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #05050A;
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --color-glow: #FFFFFF; 
+            --text-main: #FFFFFF;
+            --text-muted: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The Deep Space Canvas */
+        #space-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        /* Glassmorphism Container */
+        .hud-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 800px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* Time Block Styles */
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .label {
+            font-weight: 500;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .percentage {
+            font-weight: 300;
+            font-size: 1.8rem;
+            font-variant-numeric: tabular-nums; 
+        }
+
+        /* Progress Bar Track */
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Progress Bar Fills */
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%; /* Set by JS */
+            background: linear-gradient(90deg, transparent, var(--color-glow));
+            box-shadow: 0 0 15px var(--color-glow);
+        }
+
+        /* Dynamic Glow */
+        .glow-text { 
+            color: var(--color-glow); 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="space-canvas"></canvas>
+
+    <div class="hud-container">
+        <div class="header">
+            <h1>TIME</h1>
+        </div>
+
+        <!-- DAY -->
+        <div class="time-block">
+            <div class="block-header">
+                <div class="label">DAY</div>
+                <div class="percentage glow-text" id="pct-day">0.000%</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill-day"></div>
+            </div>
+        </div>
+
+        <!-- WEEK -->
+        <div class="time-block">
+            <div class="block-header">
+                <div class="label">WEEK</div>
+                <div class="percentage glow-text" id="pct-week">0.000%</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill-week"></div>
+            </div>
+        </div>
+
+        <!-- MONTH -->
+        <div class="time-block">
+            <div class="block-header">
+                <div class="label">MONTH</div>
+                <div class="percentage glow-text" id="pct-month">0.000%</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill-month"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // SYSTEM: THE TEMPORAL ENGINE (COGNITIVE DISSONANCE LOGIC)
+        // ==========================================
+        // Text displays: COMPLETED TIME (Ticking UP)
+        // Bar displays: REMAINING TIME (Shrinking DOWN)
+
+        function calculatePercentages() {
+            const now = new Date();
+
+            // 1. DAY CALCULATION
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const totalDayMs = endOfDay - startOfDay;
+            const elapsedDayMs = now - startOfDay;
+            const remainingDayMs = endOfDay - now;
+            
+            const dayPctCompleted = (elapsedDayMs / totalDayMs) * 100;
+            const dayPctRemaining = (remainingDayMs / totalDayMs) * 100;
+
+            // 2. WEEK CALCULATION (Monday to Sunday)
+            const dayOfWeek = now.getDay(); // 0 is Sunday, 1 is Monday
+            const distanceToMonday = (dayOfWeek + 6) % 7; 
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distanceToMonday);
+            const endOfWeek = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 7);
+            const totalWeekMs = endOfWeek - startOfWeek;
+            const elapsedWeekMs = now - startOfWeek;
+            const remainingWeekMs = endOfWeek - now;
+            
+            const weekPctCompleted = (elapsedWeekMs / totalWeekMs) * 100;
+            const weekPctRemaining = (remainingWeekMs / totalWeekMs) * 100;
+
+            // 3. MONTH CALCULATION
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const totalMonthMs = endOfMonth - startOfMonth;
+            const elapsedMonthMs = now - startOfMonth;
+            const remainingMonthMs = endOfMonth - now;
+            
+            const monthPctCompleted = (elapsedMonthMs / totalMonthMs) * 100;
+            const monthPctRemaining = (remainingMonthMs / totalMonthMs) * 100;
+
+            return { 
+                dayPctCompleted, dayPctRemaining, 
+                weekPctCompleted, weekPctRemaining, 
+                monthPctCompleted, monthPctRemaining 
+            };
+        }
+
+        function updateHUD() {
+            const stats = calculatePercentages();
+
+            // Format Text to 3 decimal places (Showing Completed %)
+            document.getElementById('pct-day').innerText = stats.dayPctCompleted.toFixed(3) + '%';
+            document.getElementById('pct-week').innerText = stats.weekPctCompleted.toFixed(3) + '%';
+            document.getElementById('pct-month').innerText = stats.monthPctCompleted.toFixed(3) + '%';
+
+            // Format Bar Width (Showing Remaining %)
+            document.getElementById('fill-day').style.width = stats.dayPctRemaining + '%';
+            document.getElementById('fill-week').style.width = stats.weekPctRemaining + '%';
+            document.getElementById('fill-month').style.width = stats.monthPctRemaining + '%';
+
+            // Loop at screen refresh rate (60FPS) to keep progress bars flawlessly smooth
+            requestAnimationFrame(updateHUD);
+        }
+
+        // Initialize HUD
+        requestAnimationFrame(updateHUD);
+
+        // ==========================================
+        // SYSTEM: IMMERSIVE PARTICLE ENGINE (MONOCHROME SPACE)
+        // ==========================================
+
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let stars = [];
+        const numStars = 400; // Density
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Parallax Listener
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - width / 2) * 0.05;
+            mouseY = (e.clientY - height / 2) * 0.05;
+        });
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.z = Math.random() * width; // Depth
+                this.size = Math.random() * 1.5;
+                // Pure white layers with varying opacity
+                this.color = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.5})`;
+            }
+
+            update() {
+                // Move towards viewer
+                this.z -= 2;
+                if (this.z <= 0) {
+                    this.z = width;
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                }
+            }
+
+            draw() {
+                let x, y, radius;
+                // Perspective projection + Mouse Parallax
+                x = (this.x - width / 2) * (width / this.z) + width / 2 + mouseX * (width / this.z);
+                y = (this.y - height / 2) * (width / this.z) + height / 2 + mouseY * (width / this.z);
+                radius = this.size * (width / this.z);
+
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Initialize Stars
+        for (let i = 0; i < numStars; i++) {
+            stars.push(new Star());
+        }
+
+        function animateSpace() {
+            // Slight opacity creates trail/glow effect for motion blur
+            ctx.fillStyle = 'rgba(5, 5, 10, 0.3)';
+            ctx.fillRect(0, 0, width, height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            requestAnimationFrame(animateSpace);
+        }
+
+        // Ignite Thrusters
+        animateSpace();
+
+    </script>
+</body>
+</html>
