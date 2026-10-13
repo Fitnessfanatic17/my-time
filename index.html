@@ -7,18 +7,19 @@
     
     <!-- PWA Manifest and Icons -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#05050A">
+    <meta name="theme-color" content="#030303">
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #05050A;
-            --glass-bg: rgba(20, 20, 35, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --color-glow: #FFFFFF; 
+            /* Ultra Luxury Minimalist Gold Palette */
+            --bg-color: #030303; 
+            --glass-bg: rgba(15, 15, 15, 0.7); 
+            --glass-border: rgba(212, 175, 55, 0.25); 
+            --color-glow: #D4AF37; 
             --text-main: #FFFFFF;
-            --text-muted: rgba(255, 255, 255, 0.5);
+            --text-muted: rgba(212, 175, 55, 0.6); 
         }
 
         * {
@@ -38,7 +39,7 @@
             align-items: center;
         }
 
-        /* The Deep Space Canvas */
+        /* The Ambient Background Canvas */
         #space-canvas {
             position: absolute;
             top: 0;
@@ -60,8 +61,8 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 
+                        inset 0 1px 0 rgba(212, 175, 55, 0.15);
             display: flex;
             flex-direction: column;
             gap: 2.5rem;
@@ -113,22 +114,22 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
         }
 
         /* Progress Bar Fills */
         .progress-fill {
             height: 100%;
             border-radius: 4px;
-            width: 0%; /* Set by JS */
-            background: var(--color-glow);
+            width: 0%; 
+            background: linear-gradient(90deg, transparent, var(--color-glow));
             box-shadow: 0 0 15px var(--color-glow);
         }
 
         /* Dynamic Glow */
         .glow-text { 
             color: var(--color-glow); 
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); 
         }
 
     </style>
@@ -197,7 +198,7 @@
             const dayPctRemaining = (remainingDayMs / totalDayMs) * 100;
 
             // 2. WEEK CALCULATION (Monday to Sunday)
-            const dayOfWeek = now.getDay(); // 0 is Sunday, 1 is Monday
+            const dayOfWeek = now.getDay(); 
             const distanceToMonday = (dayOfWeek + 6) % 7; 
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distanceToMonday);
             const endOfWeek = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 7);
@@ -228,33 +229,29 @@
         function updateHUD() {
             const stats = calculatePercentages();
 
-            // Format Text to 3 decimal places (Showing Completed %)
             document.getElementById('pct-day').innerText = stats.dayPctCompleted.toFixed(3) + '%';
             document.getElementById('pct-week').innerText = stats.weekPctCompleted.toFixed(3) + '%';
             document.getElementById('pct-month').innerText = stats.monthPctCompleted.toFixed(3) + '%';
 
-            // Format Bar Width (Showing Remaining %)
             document.getElementById('fill-day').style.width = stats.dayPctRemaining + '%';
             document.getElementById('fill-week').style.width = stats.weekPctRemaining + '%';
             document.getElementById('fill-month').style.width = stats.monthPctRemaining + '%';
 
-            // Loop at screen refresh rate (60FPS) to keep progress bars flawlessly smooth
             requestAnimationFrame(updateHUD);
         }
 
-        // Initialize HUD
         requestAnimationFrame(updateHUD);
 
         // ==========================================
-        // SYSTEM: IMMERSIVE PARTICLE ENGINE (MONOCHROME SPACE)
+        // SYSTEM: LUXURY AMBIENT PARTICLE ENGINE
         // ==========================================
 
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         
         let width, height;
-        let stars = [];
-        const numStars = 400; // Density
+        let particles = [];
+        const numParticles = 150; // Minimalist density
         let mouseX = 0;
         let mouseY = 0;
 
@@ -266,25 +263,24 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Parallax Listener
         document.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX - width / 2) * 0.05;
             mouseY = (e.clientY - height / 2) * 0.05;
         });
 
-        class Star {
+        class GoldParticle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.z = Math.random() * width; // Depth
-                this.size = Math.random() * 1.5;
-                // Pure white layers with varying opacity
-                this.color = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.5})`;
+                this.z = Math.random() * width; 
+                this.size = Math.random() * 1.5 + 0.5;
+                // Elegant metallic gold colors with varying transparency
+                this.color = `rgba(212, 175, 55, ${Math.random() * 0.6 + 0.2})`;
             }
 
             update() {
-                // Move towards viewer
-                this.z -= 2;
+                // Extremely slow drift to look like ambient dust/bubbles instead of hyper-speed
+                this.z -= 0.3; 
                 if (this.z <= 0) {
                     this.z = width;
                     this.x = Math.random() * width;
@@ -294,7 +290,6 @@
 
             draw() {
                 let x, y, radius;
-                // Perspective projection + Mouse Parallax
                 x = (this.x - width / 2) * (width / this.z) + width / 2 + mouseX * (width / this.z);
                 y = (this.y - height / 2) * (width / this.z) + height / 2 + mouseY * (width / this.z);
                 radius = this.size * (width / this.z);
@@ -306,26 +301,24 @@
             }
         }
 
-        // Initialize Stars
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new GoldParticle());
         }
 
-        function animateSpace() {
-            // Slight opacity creates trail/glow effect for motion blur
-            ctx.fillStyle = 'rgba(5, 5, 10, 0.3)';
+        function animateEnvironment() {
+            // Crisp, pure dark background with no messy motion blur
+            ctx.fillStyle = '#030303';
             ctx.fillRect(0, 0, width, height);
 
-            stars.forEach(star => {
-                star.update();
-                star.draw();
+            particles.forEach(p => {
+                p.update();
+                p.draw();
             });
 
-            requestAnimationFrame(animateSpace);
+            requestAnimationFrame(animateEnvironment);
         }
 
-        // Ignite Thrusters
-        animateSpace();
+        animateEnvironment();
 
     </script>
 
