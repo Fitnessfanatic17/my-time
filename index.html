@@ -45,8 +45,10 @@
             background: radial-gradient(circle at 50% -20%, var(--bg-ambient) 0%, var(--bg-deep) 70%);
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            
+            /* Responsive height and padding to ensure borders are never cut off */
+            min-height: 100vh;
+            padding: 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,10 +59,8 @@
         .dashboard-panel {
             position: relative;
             z-index: 10;
-            width: 90%;
+            width: 100%;
             max-width: 850px;
-            /* Ensures it never gets cut off on smaller screens */
-            max-height: 90vh; 
             
             /* Simulates polished piano black wood/acrylic */
             background: linear-gradient(160deg, var(--panel-bg-top) 0%, var(--panel-bg-bottom) 100%);
@@ -94,7 +94,7 @@
         .header h1 {
             font-family: 'Cinzel', serif;
             font-weight: 600;
-            font-size: clamp(1.8rem, 4vw, 2.2rem); /* Increased size */
+            font-size: clamp(1.8rem, 4vw, 2.2rem); 
             letter-spacing: 0.6em;
             text-transform: uppercase;
             color: var(--gold-base);
@@ -120,7 +120,7 @@
         .label {
             font-family: 'Cinzel', serif;
             font-weight: 600;
-            font-size: clamp(1.4rem, 3.5vw, 1.7rem); /* Increased size to match numbers */
+            font-size: clamp(1.4rem, 3.5vw, 1.7rem); 
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: #b3b3b3;
@@ -158,9 +158,7 @@
             /* Solid, intense glittering gold gradient without white */
             background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-base) 70%, var(--gold-light) 100%);
             /* Ambient pure gold light bleed into the groove */
-            box-shadow: 
-                0 0 15px 3px rgba(212, 175, 55, 0.7), 
-                0 0 5px 1px var(--gold-light);
+            box-shadow: 0 0 15px 3px rgba(212, 175, 55, 0.8);
             /* Smooth mechanical sweep */
             transition: width 0.1s linear;
         }
