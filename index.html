@@ -37,29 +37,6 @@
             user-select: none;
         }
 
-        /* Fixed Luxury Header */
-        .fixed-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 2.5rem 0;
-            text-align: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            z-index: 50;
-            pointer-events: none;
-        }
-
-        .dash-title {
-            font-family: 'Cinzel', serif;
-            color: var(--gold-base);
-            font-size: clamp(1.4rem, 4vw, 1.8rem);
-            letter-spacing: 0.8em;
-            margin-right: -0.8em; 
-            font-weight: 600;
-            text-shadow: 1px 1px 2px #000, 0 0 15px rgba(212, 175, 55, 0.4);
-        }
-
         /* Vertical Scroll Snap Container */
         .scroll-container {
             width: 100%;
@@ -84,9 +61,9 @@
             position: relative;
         }
 
-        /* The Analog Meter */
+        /* The Analog Meter - Reduced size to prevent touching the top browser ribbon */
         .gauge {
-            width: clamp(260px, 65vw, 450px);
+            width: clamp(220px, 50vw, 380px);
             aspect-ratio: 1 / 1;
             border-radius: 50%;
             box-shadow: 0 40px 80px rgba(0,0,0,0.95), inset 0 0 20px rgba(0,0,0,1);
@@ -138,11 +115,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Fixed Header -->
-    <div class="fixed-header">
-        <h1 class="dash-title">TIME</h1>
-    </div>
 
     <!-- Scrollable Snapping Container -->
     <div class="scroll-container">
@@ -225,7 +197,7 @@
                     <!-- Tick Marks Container -->
                     <g id="${svgTicksId}"></g>
 
-                    <!-- Automotive E and F Indicators (Adjusted lower and wider to perfectly clear the inner ring) -->
+                    <!-- Automotive E and F Indicators -->
                     <text x="44" y="155" fill="#cc0000" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">E</text>
                     <text x="156" y="155" fill="#D4AF37" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">F</text>
 
