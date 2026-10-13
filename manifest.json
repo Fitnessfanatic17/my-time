@@ -1,7 +1,7 @@
 {
-  "name": "The Singularity",
-  "short_name": "Singularity",
-  "description": "Temporal HUD Progress Tracker",
+  "name": "LUXURY",
+  "short_name": "LUXURY",
+  "description": "Luxury Dashboard Tracker",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
