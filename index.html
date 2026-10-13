@@ -201,3 +201,106 @@
                 <div class="percentage" id="pct-day">0.000%</div>
             </div>
             <div class="progress-track">
+                <div class="progress-fill" id="fill-day"></div>
+            </div>
+        </div>
+
+        <!-- WEEK GAUGE -->
+        <div class="gauge-block">
+            <div class="gauge-header">
+                <div class="label">WEEK</div>
+                <div class="percentage" id="pct-week">0.000%</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill-week"></div>
+            </div>
+        </div>
+
+        <!-- MONTH GAUGE -->
+        <div class="gauge-block">
+            <div class="gauge-header">
+                <div class="label">MONTH</div>
+                <div class="percentage" id="pct-month">0.000%</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill-month"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // SYSTEM: THE TEMPORAL ENGINE 
+        // ==========================================
+        // Text displays: COMPLETED TIME (Ticking UP)
+        // Bar displays: REMAINING TIME (Shrinking DOWN)
+
+        function calculatePercentages() {
+            const now = new Date();
+
+            // 1. DAY CALCULATION
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const totalDayMs = endOfDay - startOfDay;
+            const elapsedDayMs = now - startOfDay;
+            const remainingDayMs = endOfDay - now;
+            
+            const dayPctCompleted = (elapsedDayMs / totalDayMs) * 100;
+            const dayPctRemaining = (remainingDayMs / totalDayMs) * 100;
+
+            // 2. WEEK CALCULATION (Monday to Sunday)
+            const dayOfWeek = now.getDay(); 
+            const distanceToMonday = (dayOfWeek + 6) % 7; 
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distanceToMonday);
+            const endOfWeek = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 7);
+            const totalWeekMs = endOfWeek - startOfWeek;
+            const elapsedWeekMs = now - startOfWeek;
+            const remainingWeekMs = endOfWeek - now;
+            
+            const weekPctCompleted = (elapsedWeekMs / totalWeekMs) * 100;
+            const weekPctRemaining = (remainingWeekMs / totalWeekMs) * 100;
+
+            // 3. MONTH CALCULATION
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const totalMonthMs = endOfMonth - startOfMonth;
+            const elapsedMonthMs = now - startOfMonth;
+            const remainingMonthMs = endOfMonth - now;
+            
+            const monthPctCompleted = (elapsedMonthMs / totalMonthMs) * 100;
+            const monthPctRemaining = (remainingMonthMs / totalMonthMs) * 100;
+
+            return { 
+                dayPctCompleted, dayPctRemaining, 
+                weekPctCompleted, weekPctRemaining, 
+                monthPctCompleted, monthPctRemaining 
+            };
+        }
+
+        function updateHUD() {
+            const stats = calculatePercentages();
+
+            document.getElementById('pct-day').innerText = stats.dayPctCompleted.toFixed(3) + '%';
+            document.getElementById('pct-week').innerText = stats.weekPctCompleted.toFixed(3) + '%';
+            document.getElementById('pct-month').innerText = stats.monthPctCompleted.toFixed(3) + '%';
+
+            document.getElementById('fill-day').style.width = stats.dayPctRemaining + '%';
+            document.getElementById('fill-week').style.width = stats.weekPctRemaining + '%';
+            document.getElementById('fill-month').style.width = stats.monthPctRemaining + '%';
+
+            requestAnimationFrame(updateHUD);
+        }
+
+        requestAnimationFrame(updateHUD);
+    </script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+        });
+      }
+    </script>
+</body>
+</html>
