@@ -1,10 +1,11 @@
 {
-  "name": "Temporal HUD",
-  "short_name": "HUD",
+  "name": "The Singularity",
+  "short_name": "Singularity",
+  "description": "Temporal HUD Progress Tracker",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#05050A",
-  "theme_color": "#05050A",
+  "background_color": "#030303",
+  "theme_color": "#030303",
   "icons": [
     {
       "src": "icon-192.png",
