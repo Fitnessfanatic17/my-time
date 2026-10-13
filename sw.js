@@ -1,4 +1,4 @@
-const CACHE_NAME = 'luxury-cache-v4';
+const CACHE_NAME = 'luxury-cache-v5';
 const urlsToCache = [
   './',
   './index.html',
