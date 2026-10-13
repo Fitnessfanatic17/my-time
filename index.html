@@ -23,8 +23,8 @@
             --panel-bg-bottom: #050505;
             
             /* Champagne Gold Metal Accents */
-            --gold-dark: #7a6332;
-            --gold-base: #C5A059;
+            --gold-dark: #8a6d2b;
+            --gold-base: #D4AF37;
             --gold-light: #F8E5A7;
             
             /* Chrome Bezel Highlights */
@@ -59,6 +59,8 @@
             z-index: 10;
             width: 90%;
             max-width: 850px;
+            /* Ensures it never gets cut off on smaller screens */
+            max-height: 90vh; 
             
             /* Simulates polished piano black wood/acrylic */
             background: linear-gradient(160deg, var(--panel-bg-top) 0%, var(--panel-bg-bottom) 100%);
@@ -69,30 +71,30 @@
             border-bottom-color: #000;
             border-radius: 12px;
             
-            padding: 4.5rem;
+            /* Scalable padding and gaps to keep layout contained */
+            padding: clamp(2.5rem, 5vh, 4.5rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2.5rem, 6vh, 4rem);
             
             /* Drop shadow and inner glowing reflection */
             box-shadow: 
                 0 40px 100px rgba(0, 0, 0, 0.95), 
                 inset 0 2px 3px var(--bezel-highlight),
                 inset 0 -2px 5px var(--bezel-shadow);
-                
-            display: flex;
-            flex-direction: column;
-            gap: 4rem;
         }
 
         /* Branding / Header */
         .header {
             text-align: center;
-            margin-bottom: -1rem;
             position: relative;
+            margin-top: -1rem;
         }
 
         .header h1 {
             font-family: 'Cinzel', serif;
             font-weight: 600;
-            font-size: 1.4rem;
+            font-size: clamp(1.8rem, 4vw, 2.2rem); /* Increased size */
             letter-spacing: 0.6em;
             text-transform: uppercase;
             color: var(--gold-base);
@@ -100,18 +102,6 @@
             
             /* Subtle engraved look */
             text-shadow: 1px 1px 2px #000, -1px -1px 1px rgba(255,255,255,0.1);
-        }
-
-        /* Decorative Chrome Line */
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-base), transparent);
         }
 
         /* Individual Gauge Block */
@@ -130,16 +120,16 @@
         .label {
             font-family: 'Cinzel', serif;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: clamp(1.4rem, 3.5vw, 1.7rem); /* Increased size to match numbers */
             letter-spacing: 0.25em;
             text-transform: uppercase;
-            color: #999;
+            color: #b3b3b3;
         }
 
         .percentage {
             font-family: 'Montserrat', sans-serif;
             font-weight: 200;
-            font-size: 2.2rem;
+            font-size: clamp(2.2rem, 5vw, 2.6rem);
             font-variant-numeric: tabular-nums; 
             letter-spacing: -0.02em;
             color: #FFFFFF;
@@ -160,29 +150,19 @@
                 inset 0 -1px 1px rgba(255, 255, 255, 0.1);
         }
 
-        /* Sweeping LED / Metallic Needle */
+        /* Sweeping Intense Gold LED / Metallic Needle */
         .progress-fill {
             height: 100%;
             border-radius: 3px;
             width: 0%; 
-            /* Rich metallic gold gradient */
-            background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-base) 60%, var(--gold-light) 100%);
-            /* Ambient light bleed into the groove */
-            box-shadow: 0 0 12px 1px rgba(197, 160, 89, 0.6);
+            /* Solid, intense glittering gold gradient without white */
+            background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-base) 70%, var(--gold-light) 100%);
+            /* Ambient pure gold light bleed into the groove */
+            box-shadow: 
+                0 0 15px 3px rgba(212, 175, 55, 0.7), 
+                0 0 5px 1px var(--gold-light);
             /* Smooth mechanical sweep */
             transition: width 0.1s linear;
-        }
-
-        /* Add a subtle highlight to the tip of the progress bar */
-        .progress-fill::after {
-            content: '';
-            display: block;
-            float: right;
-            width: 4px;
-            height: 100%;
-            background: #FFFFFF;
-            border-radius: 2px;
-            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
         }
 
     </style>
