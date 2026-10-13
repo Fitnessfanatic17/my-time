@@ -23,9 +23,7 @@
             --panel-bg-bottom: #050505;
             
             /* Champagne Gold Metal Accents */
-            --gold-dark: #8a6d2b;
             --gold-base: #D4AF37;
-            --gold-light: #F8E5A7;
             
             /* Chrome Bezel Highlights */
             --bezel-highlight: rgba(255, 255, 255, 0.15);
@@ -46,12 +44,14 @@
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             
-            /* Responsive height and padding to ensure borders are never cut off */
+            /* Dynamic height handles mobile UI bars to prevent bottom cutoff */
             min-height: 100vh;
+            min-height: 100dvh;
             padding: 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: auto; /* Allows smooth scrolling if screen is extremely small */
             user-select: none;
         }
 
@@ -72,10 +72,10 @@
             border-radius: 12px;
             
             /* Scalable padding and gaps to keep layout contained */
-            padding: clamp(2.5rem, 5vh, 4.5rem);
+            padding: clamp(2rem, 5vh, 4rem);
             display: flex;
             flex-direction: column;
-            gap: clamp(2.5rem, 6vh, 4rem);
+            gap: clamp(2rem, 5vh, 3.5rem);
             
             /* Drop shadow and inner glowing reflection */
             box-shadow: 
@@ -150,15 +150,15 @@
                 inset 0 -1px 1px rgba(255, 255, 255, 0.1);
         }
 
-        /* Sweeping Intense Gold LED / Metallic Needle */
+        /* Sweeping Solid Gold LED / Metallic Needle */
         .progress-fill {
             height: 100%;
             border-radius: 3px;
             width: 0%; 
-            /* Solid, intense glittering gold gradient without white */
-            background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-base) 70%, var(--gold-light) 100%);
+            /* Pure, solid gold - no gradients, no white tips */
+            background: var(--gold-base);
             /* Ambient pure gold light bleed into the groove */
-            box-shadow: 0 0 15px 3px rgba(212, 175, 55, 0.8);
+            box-shadow: 0 0 15px 2px rgba(212, 175, 55, 0.7);
             /* Smooth mechanical sweep */
             transition: width 0.1s linear;
         }
@@ -210,9 +210,6 @@
         // ==========================================
         // SYSTEM: THE TEMPORAL ENGINE 
         // ==========================================
-        // Text displays: COMPLETED TIME (Ticking UP)
-        // Bar displays: REMAINING TIME (Shrinking DOWN)
-
         function calculatePercentages() {
             const now = new Date();
 
@@ -226,7 +223,7 @@
             const dayPctCompleted = (elapsedDayMs / totalDayMs) * 100;
             const dayPctRemaining = (remainingDayMs / totalDayMs) * 100;
 
-            // 2. WEEK CALCULATION (Monday to Sunday)
+            // 2. WEEK CALCULATION
             const dayOfWeek = now.getDay(); 
             const distanceToMonday = (dayOfWeek + 6) % 7; 
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distanceToMonday);
