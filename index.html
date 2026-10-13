@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE SINGULARITY</title>
+    <title>THE SINGULARITY // HUD</title>
     
     <!-- PWA Manifest and Icons -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#030303">
+    <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Ultra Luxury Minimalist Gold Palette */
-            --bg-color: #030303; 
-            --glass-bg: rgba(15, 15, 15, 0.7); 
-            --glass-border: rgba(212, 175, 55, 0.25); 
-            --color-glow: #D4AF37; 
+            --bg-dark: #000000;
+            --bg-light: #0d0d12;
+            --glass-bg: rgba(10, 10, 12, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.04);
+            --color-glow: #FFFFFF; 
             --text-main: #FFFFFF;
-            --text-muted: rgba(212, 175, 55, 0.6); 
+            --text-muted: rgba(255, 255, 255, 0.4);
         }
 
         * {
@@ -29,7 +29,8 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            /* Ultra-premium subtle radial depth, completely devoid of particles */
+            background: radial-gradient(circle at 50% 0%, var(--bg-light) 0%, var(--bg-dark) 80%);
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             height: 100vh;
@@ -37,35 +38,36 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            user-select: none;
         }
 
-        /* The Ambient Background Canvas */
-        #space-canvas {
+        /* Ambient backlight for the HUD */
+        .ambient-glow {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 60vw;
+            height: 40vh;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
             z-index: 0;
+            pointer-events: none;
         }
 
-        /* Glassmorphism Container */
+        /* Monolithic Dark Glass Container */
         .hud-container {
             position: relative;
             z-index: 10;
             width: 90%;
             max-width: 800px;
             background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 
-                        inset 0 1px 0 rgba(212, 175, 55, 0.15);
+            border-radius: 16px;
+            padding: 4rem;
+            box-shadow: 0 60px 120px rgba(0, 0, 0, 0.9), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 3.5rem;
         }
 
         .header {
@@ -74,18 +76,19 @@
         }
 
         .header h1 {
-            font-weight: 800;
-            font-size: 1.5rem;
-            letter-spacing: 0.4em;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.8em;
             text-transform: uppercase;
             color: var(--text-muted);
+            margin-right: -0.8em; /* Optically center letter-spaced text */
         }
 
         /* Time Block Styles */
         .time-block {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 1rem;
         }
 
         .block-header {
@@ -95,48 +98,50 @@
         }
 
         .label {
-            font-weight: 500;
-            font-size: 1.2rem;
-            letter-spacing: 0.1em;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .percentage {
-            font-weight: 300;
-            font-size: 1.8rem;
+            font-weight: 200;
+            font-size: 2.2rem;
             font-variant-numeric: tabular-nums; 
+            letter-spacing: -0.02em;
         }
 
-        /* Progress Bar Track */
+        /* Razor-thin Progress Track */
         .progress-track {
             width: 100%;
-            height: 8px;
+            height: 3px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
+            border-radius: 2px;
             overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
         }
 
-        /* Progress Bar Fills */
+        /* High-intensity Progress Fill */
         .progress-fill {
             height: 100%;
-            border-radius: 4px;
+            border-radius: 2px;
             width: 0%; 
-            background: linear-gradient(90deg, transparent, var(--color-glow));
-            box-shadow: 0 0 15px var(--color-glow);
+            background: var(--color-glow);
+            box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.5);
         }
 
-        /* Dynamic Glow */
+        /* Crisp Glow */
         .glow-text { 
             color: var(--color-glow); 
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); 
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); 
         }
 
     </style>
 </head>
 <body>
 
-    <canvas id="space-canvas"></canvas>
+    <!-- Subtle light cast behind the panel -->
+    <div class="ambient-glow"></div>
 
     <div class="hud-container">
         <div class="header">
@@ -179,7 +184,7 @@
 
     <script>
         // ==========================================
-        // SYSTEM: THE TEMPORAL ENGINE (COGNITIVE DISSONANCE LOGIC)
+        // SYSTEM: THE TEMPORAL ENGINE 
         // ==========================================
         // Text displays: COMPLETED TIME (Ticking UP)
         // Bar displays: REMAINING TIME (Shrinking DOWN)
@@ -241,85 +246,6 @@
         }
 
         requestAnimationFrame(updateHUD);
-
-        // ==========================================
-        // SYSTEM: LUXURY AMBIENT PARTICLE ENGINE
-        // ==========================================
-
-        const canvas = document.getElementById('space-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        const numParticles = 150; // Minimalist density
-        let mouseX = 0;
-        let mouseY = 0;
-
-        function resizeCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - width / 2) * 0.05;
-            mouseY = (e.clientY - height / 2) * 0.05;
-        });
-
-        class GoldParticle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.z = Math.random() * width; 
-                this.size = Math.random() * 1.5 + 0.5;
-                // Elegant metallic gold colors with varying transparency
-                this.color = `rgba(212, 175, 55, ${Math.random() * 0.6 + 0.2})`;
-            }
-
-            update() {
-                // Extremely slow drift to look like ambient dust/bubbles instead of hyper-speed
-                this.z -= 0.3; 
-                if (this.z <= 0) {
-                    this.z = width;
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                }
-            }
-
-            draw() {
-                let x, y, radius;
-                x = (this.x - width / 2) * (width / this.z) + width / 2 + mouseX * (width / this.z);
-                y = (this.y - height / 2) * (width / this.z) + height / 2 + mouseY * (width / this.z);
-                radius = this.size * (width / this.z);
-
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < numParticles; i++) {
-            particles.push(new GoldParticle());
-        }
-
-        function animateEnvironment() {
-            // Crisp, pure dark background with no messy motion blur
-            ctx.fillStyle = '#030303';
-            ctx.fillRect(0, 0, width, height);
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            requestAnimationFrame(animateEnvironment);
-        }
-
-        animateEnvironment();
-
     </script>
 
     <!-- PWA Service Worker Registration -->
