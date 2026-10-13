@@ -33,8 +33,31 @@
             font-family: 'Montserrat', sans-serif;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Hide the default window scrollbar */
+            overflow: hidden; 
             user-select: none;
+        }
+
+        /* Fixed Luxury Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2.5rem 0;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .dash-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-base);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            letter-spacing: 0.8em;
+            margin-right: -0.8em; 
+            font-weight: 600;
+            text-shadow: 1px 1px 2px #000, 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         /* Vertical Scroll Snap Container */
@@ -42,7 +65,7 @@
             width: 100%;
             height: 100dvh;
             overflow-y: auto;
-            scroll-snap-type: y mandatory; /* Forces snapping to each meter */
+            scroll-snap-type: y mandatory; 
             scroll-behavior: smooth;
             /* Ambient Cabin Background */
             background: radial-gradient(circle at 50% 50%, var(--bg-ambient) 0%, var(--bg-deep) 100%);
@@ -52,7 +75,7 @@
         .gauge-section {
             width: 100%;
             height: 100dvh;
-            scroll-snap-align: center; /* Centers the meter on the screen */
+            scroll-snap-align: center; 
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -115,6 +138,11 @@
     </style>
 </head>
 <body>
+
+    <!-- Fixed Header -->
+    <div class="fixed-header">
+        <h1 class="dash-title">TIME</h1>
+    </div>
 
     <!-- Scrollable Snapping Container -->
     <div class="scroll-container">
@@ -197,9 +225,9 @@
                     <!-- Tick Marks Container -->
                     <g id="${svgTicksId}"></g>
 
-                    <!-- Automotive E and F Indicators (Moved Inwards) -->
-                    <text x="48" y="142" fill="#cc0000" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">E</text>
-                    <text x="152" y="142" fill="#D4AF37" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">F</text>
+                    <!-- Automotive E and F Indicators (Adjusted lower and wider to perfectly clear the inner ring) -->
+                    <text x="44" y="155" fill="#cc0000" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">E</text>
+                    <text x="156" y="155" fill="#D4AF37" font-family="'Cinzel', serif" font-size="14" font-weight="700" text-anchor="middle">F</text>
 
                     <!-- Sweeping Analog Needle -->
                     <g id="${needleId}" style="transform-origin: 100px 100px; filter: drop-shadow(0px 8px 6px rgba(0,0,0,0.8));">
