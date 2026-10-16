@@ -1,6 +1,6 @@
 {
-  "name": "LUXURY",
-  "short_name": "LUXURY",
+  "name": "RIDE",
+  "short_name": "RIDE",
   "description": "Luxury Dashboard Tracker",
   "start_url": "./index.html",
   "display": "standalone",
