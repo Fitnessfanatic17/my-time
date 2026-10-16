@@ -112,6 +112,35 @@
             z-index: -1;
             pointer-events: none;
         }
+
+        /* Android Mobile Landscape Optimization */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gauge-section {
+                gap: clamp(0.4rem, 2.5dvh, 1rem);
+                padding: 2dvh 0;
+            }
+
+            .gauge {
+                width: clamp(135px, 54dvh, 230px);
+            }
+
+            .readout-container {
+                gap: 0.5dvh;
+            }
+
+            .gauge-label {
+                font-size: clamp(0.85rem, 3.8dvh, 1.2rem);
+            }
+
+            .percentage-readout {
+                font-size: clamp(1.4rem, 7.5dvh, 2.3rem);
+            }
+
+            .ambient-glow {
+                width: 75dvh;
+                height: 75dvh;
+            }
+        }
     </style>
 </head>
 <body>
